@@ -1,11 +1,8 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import './index.css';
-import { Entry } from './entry';
+function Main() {
 
-const root = document.getElementById('root') as HTMLElement;
 
-createRoot(root).render(
-  <Entry/>
-);
+  return;
+}
