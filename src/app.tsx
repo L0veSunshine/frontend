@@ -20,7 +20,7 @@ function App() {
     prefixCls: 'x'
   }), [lang]);
 
-  const RouteArray: RouteItem[] = useMemo(() => [
+  const routeArray: RouteItem[] = useMemo(() => [
     { path: '/', Component: Index, meta: { auth: false, title: '主页' } },
     { path: '/login', Component: Login, meta: { auth: false, title: '登录' } },
     { path: '/signup', Component: Signup, meta: { auth: false, title: '注册' } },
@@ -33,7 +33,7 @@ function App() {
         <Header/>
         <div className="app-main">
           <Routes>
-            {genRoutes(RouteArray, token)}
+            {genRoutes(routeArray, token)}
           </Routes>
         </div>
       </BrowserRouter>

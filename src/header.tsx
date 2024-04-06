@@ -42,12 +42,17 @@ const I18nSwitcher = () => {
 function AppHeader(props: Partial<NavBarStatus>) {
   const { login = false, enableSearch = false, enableI18n = true } = props;
   const { trans } = useIntl();
-  const navigator=useNavigate()
+  const navigator = useNavigate();
 
   return (
     <div className="app-header">
       <div className="app-header-content">
-        <div className="left-btn"></div>
+        <div className="left-btn">
+          <Space direction={'horizontal'} size={'small'} onClick={() => navigator('/')}>
+            <img className="app-logo" src="../assets/img/logo.png" alt="logo"/>
+            <div>XGit</div>
+          </Space>
+        </div>
         <div className="right-btn">
           <Space direction="horizontal" size="middle">
             {enableSearch &&
@@ -58,8 +63,8 @@ function AppHeader(props: Partial<NavBarStatus>) {
               login ? <div style={{ cursor: 'pointer', userSelect: 'none' }}>
                   <UserDropDown><Avatar>Xuan</Avatar></UserDropDown></div> :
                 <>
-                  <Button onClick={()=>navigator('/signup')}>{trans('signup')}</Button>
-                  <Button onClick={()=>navigator('/login')}>{trans('login')}</Button>
+                  <Button onClick={() => navigator('/signup')}>{trans('signup')}</Button>
+                  <Button onClick={() => navigator('/login')}>{trans('login')}</Button>
                 </>
             }
           </Space>

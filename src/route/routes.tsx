@@ -4,7 +4,7 @@
  * @since 2024/4/5 上午 12:03
  */
 
-import { createElement, ReactNode } from 'react';
+import { createElement, ReactElement, ReactNode } from 'react';
 import type { PathRouteProps } from 'react-router-dom';
 import { Navigate, Route } from 'react-router-dom';
 
@@ -14,26 +14,30 @@ type AdditionInfo<T extends ExactInfo> = {
   meta: {
     auth?: boolean
     title?: string
-  } & T;
-  customEvent?(args: T): void
+  } & Partial<T>;
+  customEvent?: (args: T) => void
+  customRetEvent?: (args: T) => ReactElement
 }
 
 type Permission = {
   token?: string
 }
 
-export type RouteItem<T extends ExactInfo = {}> = PathRouteProps & Partial<AdditionInfo<T>>
+export type RouteItem<T extends ExactInfo = {}> = PathRouteProps & AdditionInfo<T>
 
 type BaseRouteProps<T extends ExactInfo> =
   Pick<PathRouteProps, 'element'>
-  & Partial<AdditionInfo<T>>
+  & AdditionInfo<T>
   & Permission
 
-function BaseRouteComponent<T extends ExactInfo>(props: BaseRouteProps<T>) {
-  const { meta, element, token, customEvent } = props;
+function BaseRouteComponent<T extends ExactInfo>(props: BaseRouteProps<T>): ReactElement {
+  const { meta, element, token, customEvent, customRetEvent } = props;
   const { auth, title, ...rest } = meta || {};
   if (typeof customEvent === 'function') {
     customEvent(rest as T);
+  }
+  if (typeof customRetEvent === 'function') {
+    return customRetEvent(rest as T);
   }
   if (title) {
     document.title = title;
@@ -45,7 +49,7 @@ function BaseRouteComponent<T extends ExactInfo>(props: BaseRouteProps<T>) {
   return createElement(component, rest);
 }
 
-function genRoutes<T extends ExactInfo = {}>(configs: RouteItem<T>[], token: string) {
+function genRoutes<T extends ExactInfo>(configs: RouteItem<T>[], token: string) {
   return configs.map((config, index) => {
     let Element: ReactNode;
     const { meta, element, Component, customEvent, ...other } = config;
