@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useIntl } from './utils/intl.tsx';
-import { Avatar, Button, Dropdown, Input, Space } from 'antd';
 import type { MenuProps } from 'antd';
+import { Avatar, Button, Dropdown, Input, Space } from 'antd';
 import { SearchOutlined, TranslationOutlined } from '@ant-design/icons';
 import { useDispatch } from './store/store.ts';
 import { changeLang } from './store/appSlice.ts';
 
 import './header.less';
-import { useNavigate } from 'react-router-dom';
 
 type NavBarStatus = {
   login: boolean
