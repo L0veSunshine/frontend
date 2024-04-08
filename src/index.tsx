@@ -13,7 +13,7 @@ import {
   SyncOutlined
 } from '@ant-design/icons';
 import './index.less';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useIntl } from './utils/intl.tsx';
 import { useSelector } from './store/store.ts';
 
@@ -21,6 +21,7 @@ const { Sider, Content } = Layout;
 
 function Index() {
   const navigator = useNavigate();
+  const { id } = useParams();
   const lang = useSelector(state => state.global);
   const [collapsed, setCollapsed] = useState(false);
   const { trans } = useIntl();
@@ -43,7 +44,7 @@ function Index() {
                  <DoubleLeftOutlined/>} onCollapse={(s) => setCollapsed(s)}>
           <Menu mode="inline" items={menuItems} inlineIndent={20}/>
         </Sider>
-        <Content>
+        <Content style={{ padding: '1.5rem' }}>
           <Outlet/>
         </Content>
       </Layout>

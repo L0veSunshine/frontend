@@ -1,7 +1,7 @@
 import React from 'react';
 
 function DashBoard() {
-  return <>dash</>
+  return <div>dash</div>;
 }
 
 export default DashBoard
