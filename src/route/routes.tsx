@@ -54,7 +54,7 @@ function BaseRouteComponent<T extends ExactInfo>(props: BaseRouteProps<T>): Reac
 function genRoutes<T extends ExactInfo>(configs: RouteItem<T>[], token: string) {
   return configs.map((config, index) => {
     let Element: ReactNode;
-    const { meta, element, Component, customEvent, children, ...other } = config;
+    const { meta, element, Component, children, ...other } = config;
     if (Component) {
       Element = <Component/>;
     }
@@ -65,7 +65,7 @@ function genRoutes<T extends ExactInfo>(configs: RouteItem<T>[], token: string) 
     if (Array.isArray(children)) {
       nestedRoutes = genRoutes(children, token);
     }
-    const renderComponent = <BaseRouteComponent element={Element} meta={meta} customEvent={customEvent} token={token}/>;
+    const renderComponent = <BaseRouteComponent element={Element} meta={meta} token={token}/>;
     return <Route key={index} element={renderComponent} children={nestedRoutes} {...other}/>;
   });
 }
