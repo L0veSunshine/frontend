@@ -1,0 +1,31 @@
+.login-page-content {
+  display: block;
+  width: 50%;
+  @media (width > 1200px) {
+    width: 550px;
+  }
+
+  @media (width < 600px) {
+    width: 60%;
+  }
+
+  margin: 100px auto 0 auto;
+
+  .login-page-logo {
+    width: 100%;
+    margin-bottom: 1rem;
+
+    & > img {
+      display: block;
+      margin: 0 auto;
+      width: 8rem;
+      height: 8rem;
+    }
+
+    & > div {
+      text-align: center;
+      font-size: 1.25rem;
+      font-family: "Microsoft Sans Serif", serif;
+    }
+  }
+}

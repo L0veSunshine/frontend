@@ -14,7 +14,7 @@ import {
 } from '@ant-design/icons';
 import './index.less';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
-import { useIntl } from './utils/intl.tsx';
+import { useIntl } from './utils/i18n/intl.tsx';
 import { useSelector } from './store/store.ts';
 
 const { Sider, Content } = Layout;
@@ -22,30 +22,30 @@ const { Sider, Content } = Layout;
 function Index() {
   const navigator = useNavigate();
   const { id } = useParams();
-  const lang = useSelector(state => state.global);
+  const { lang } = useSelector(state => state.global);
   const [collapsed, setCollapsed] = useState(false);
   const { trans } = useIntl();
 
   const menuItems: MenuProps['items'] = useMemo(() => [
-    { label: 'Code', key: '1', icon: <CodeOutlined/> },
-    { label: 'Issues', key: '2', icon: <IssuesCloseOutlined/> },
-    { label: 'Pull Request', key: '3', icon: <PullRequestOutlined/> },
-    { label: 'Action', key: '4', icon: <CiOutlined/> },
-    { label: 'Release', key: '5', icon: <SyncOutlined/> },
-    { label: 'Wiki', key: '6', icon: <BookOutlined/> },
-    { label: 'Activities', key: '7', icon: <CloudDownloadOutlined/> }
+    { label: 'Code', key: '1', icon: <CodeOutlined /> },
+    { label: 'Issues', key: '2', icon: <IssuesCloseOutlined /> },
+    { label: 'Pull Request', key: '3', icon: <PullRequestOutlined /> },
+    { label: 'Action', key: '4', icon: <CiOutlined /> },
+    { label: 'Release', key: '5', icon: <SyncOutlined /> },
+    { label: 'Wiki', key: '6', icon: <BookOutlined /> },
+    { label: 'Activities', key: '7', icon: <CloudDownloadOutlined /> }
   ], [lang]);
 
   return (
     <>
       <Layout hasSider rootClassName="main-component-content">
         <Sider collapsedWidth={'4rem'} style={{ background: 'white' }} collapsible collapsed={collapsed} width={'14rem'}
-               trigger={collapsed ? <DoubleRightOutlined/> :
-                 <DoubleLeftOutlined/>} onCollapse={(s) => setCollapsed(s)}>
-          <Menu mode="inline" items={menuItems} inlineIndent={20}/>
+          trigger={collapsed ? <DoubleRightOutlined /> :
+            <DoubleLeftOutlined />} onCollapse={(s) => setCollapsed(s)}>
+          <Menu mode="inline" items={menuItems} inlineIndent={20} />
         </Sider>
         <Content style={{ padding: '1.5rem' }}>
-          <Outlet/>
+          <Outlet />
         </Content>
       </Layout>
     </>

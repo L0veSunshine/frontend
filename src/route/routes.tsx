@@ -1,73 +1,44 @@
 /**
  *
  * @author Xuan
- * @since 2024/4/5 上午 12:03
+ * @since 2024/8/10 下午 06:42
  */
+import type { RouteItem } from './routeItem.tsx';
+import { Outlet } from 'react-router-dom';
+import React, { lazy } from 'react';
 
-import { createElement, ReactElement, ReactNode } from 'react';
-import type { PathRouteProps } from 'react-router-dom';
-import { Navigate, Route } from 'react-router-dom';
+const DashBoardPage = lazy(() => import('../pages/dashBoard.tsx'));
+const LoginPage = lazy(() => import('../pages/login.tsx'));
+const SignupPage = lazy(() => import('../pages/signup.tsx'));
+const SettingPage = lazy(() => import('../pages/setting.tsx'));
+const RepoIndexPage = lazy(() => import('../pages/repoIndex.tsx'));
+const NotFoundPage = lazy(() => import('../pages/NotFound.tsx'));
+const IndexPage = lazy(() => import('../index.tsx'));
 
-type ExactInfo = Omit<Record<string, any>, 'auth' | 'title'>
 
-type AdditionInfo<T extends ExactInfo> = {
-  meta?: {
-    auth?: boolean
-    title?: string
-  } & Partial<T>;
-  customEvent?: (args: T) => void
-  customRetEvent?: (args: T) => ReactElement
-}
+const appRoutes: RouteItem[] = [
+  { path: '/login', Component: LoginPage, meta: { auth: false, title: '登录' } },
+  { path: '/signup', Component: SignupPage, meta: { auth: false, title: '注册' } },
+  { path: '/dashboard', Component: DashBoardPage, meta: { auth: true, title: '仪表盘' } },
+  { path: '/setting', Component: SettingPage, meta: { auth: true, title: '设置' } },
+  {
+    path: '/:id', Component: IndexPage, meta: { title: '主页' }, children: [
+      { path: '', Component: () => <h2>222111</h2>, meta: { title: '代码' } },
+      {
+        path: ':repo', Component: () => <Outlet />, children: [
+          { path: '', Component: RepoIndexPage },
+          { path: 'issues', Component: () => <h2>issue</h2>, meta: { title: 'Issues' } },
+          { path: 'pulls', Component: () => <h2>pulls</h2>, meta: { title: 'Pulls' } },
+          { path: 'action', Component: () => <h2>action</h2>, meta: { title: 'Action' } },
+          { path: 'release', Component: () => <h2>release</h2>, meta: { title: 'Release' } },
+          { path: 'wiki', Component: () => <h2>wiki</h2>, meta: { title: 'Wiki' } },
+          { path: 'activities', Component: () => <h2>activities</h2>, meta: { title: 'Activities' } },
+        ]
+      },
+    ]
+  },
+  { path: '/', Component: DashBoardPage, meta: { auth: false, title: 'xgit' } },
+  { path: '/*', Component: NotFoundPage, meta: { auth: false, title: '404' } },
+];
 
-type Permission = {
-  token?: string
-}
-
-export type RouteItem<T extends ExactInfo = {}> = Omit<PathRouteProps, 'children'> & AdditionInfo<T> & {
-  children?: RouteItem<T>[]
-}
-
-type BaseRouteProps<T extends ExactInfo> =
-  Pick<PathRouteProps, 'element'>
-  & AdditionInfo<T>
-  & Permission
-
-function BaseRouteComponent<T extends ExactInfo>(props: BaseRouteProps<T>): ReactElement {
-  const { meta, element, token, customEvent, customRetEvent } = props;
-  const { auth, title, ...rest } = meta || {};
-  if (typeof customEvent === 'function') {
-    customEvent(rest as T);
-  }
-  if (typeof customRetEvent === 'function') {
-    return customRetEvent(rest as T);
-  }
-  if (title) {
-    document.title = title;
-  }
-  if (auth && !token) {
-    return <Navigate to="/"/>;
-  }
-  const component = () => element;
-  return createElement(component, rest);
-}
-
-function genRoutes<T extends ExactInfo>(configs: RouteItem<T>[], token: string) {
-  return configs.map((config, index) => {
-    let Element: ReactNode;
-    const { meta, element, Component, children, ...other } = config;
-    if (Component) {
-      Element = <Component/>;
-    }
-    if (element) {
-      Element = element;
-    }
-    let nestedRoutes: ReactNode | undefined = undefined;
-    if (Array.isArray(children)) {
-      nestedRoutes = genRoutes(children, token);
-    }
-    const renderComponent = <BaseRouteComponent element={Element} meta={meta} token={token}/>;
-    return <Route key={index} element={renderComponent} children={nestedRoutes} {...other}/>;
-  });
-}
-
-export { genRoutes };
+export default appRoutes;

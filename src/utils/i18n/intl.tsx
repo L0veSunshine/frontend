@@ -4,10 +4,10 @@
  * @since 2024/4/4 上午 01:14
  */
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import DefaultI18n from './defaultI18n.ts';
+import { AvailableLanguage } from './intlConst.ts';
 
-type IntlCtxType = {
-  trans(key: string): string
+interface IntlCtxType {
+  trans(key: string): string;
 }
 
 function createNamedContext<T>(name: string, defaultValue: T) {
@@ -20,21 +20,17 @@ const IntlCtx = createNamedContext<IntlCtxType>('intlContext', null as any);
 
 function IntlProvider(props: { lang: string, children: React.ReactNode }) {
   const { lang, children } = props;
-  const intl = useRef<ReturnType<typeof createIntl> | null>(null);
+  const intl = useRef<ReturnType<typeof createIntl>>(createIntl());
   const isMount = useRef(false);
-  if (!intl.current) {
-    intl.current = createIntl();
-    intl.current.loadResource(DefaultI18n);
-  }
+  void intl.current.loadResource(lang);
   const [value, setValue] = useState(() => ({ trans: intl.current!.translate }));
 
   useEffect(() => {
     if (!isMount.current) {
       isMount.current = true;
     } else {
-      languageResLoader(lang).then(res => {
-        intl.current!.loadResource(res.default);
-        setValue({ trans: intl.current!.translate });
+      intl.current.loadResource(lang).then(() => {
+        setValue({ trans: intl.current.translate });
       });
     }
   }, [lang]);
@@ -46,20 +42,21 @@ function useIntl(): IntlCtxType {
   return useContext(IntlCtx);
 }
 
-export function languageResLoader(lang: string): Promise<Record<'default', Record<string, any>>> {
-  switch (lang) {
-    case 'en-US':
-      return import('../../assets/i18n/string.en-US.json');
-    default:
-      return new Promise(resolve => resolve({ 'default': DefaultI18n }));
-  }
-}
 
 function createIntl() {
   let resource: Record<string, string>;
 
-  function loadResource(res: Record<string, string>) {
-    resource = res;
+  function loadIntlRes(lang: string): Promise<Record<'default', Record<string, any>>> {
+    if (AvailableLanguage.includes(lang)) {
+      return import((`../../../assets/i18n/string.${lang}.json`));
+    }
+    return import('../../../assets/i18n/string.en-US.json');
+  }
+
+  async function loadResource(lang: string) {
+    return loadIntlRes(lang).then(res => {
+      resource = res.default;
+    });
   }
 
   function translate(key: string) {

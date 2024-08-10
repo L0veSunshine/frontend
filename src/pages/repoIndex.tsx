@@ -11,7 +11,7 @@ const RepoIndex = () => {
   return (
     <>
       <div>{repo} Index</div>
-      <Outlet/>
+      <Outlet />
     </>
   );
 };

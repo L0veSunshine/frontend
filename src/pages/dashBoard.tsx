@@ -4,4 +4,4 @@ function DashBoard() {
   return <div>dash</div>;
 }
 
-export default DashBoard
+export default DashBoard;

@@ -4,10 +4,10 @@
  * @since 2024/4/3 上午 12:37
  */
 
-import { getBrowserLang } from '../utils/common_utils';
+import { getLocaleFromBrowser } from '../utils/i18n/utils.ts';
 import { createSlice } from '@reduxjs/toolkit';
 
-interface InitialState {
+interface AppConfig {
   lang: string,
   token: string,
   configs?: {
@@ -16,14 +16,14 @@ interface InitialState {
   }
 }
 
-const initialState: InitialState = {
-  lang: getBrowserLang(),
+const appConfig: AppConfig = {
+  lang: getLocaleFromBrowser(),
   token: '',
 };
 
 const AppSlice = createSlice({
   name: 'app',
-  initialState: initialState,
+  initialState: appConfig,
   reducers: {
     changeLang(state, action) {
       state.lang = action.payload;
