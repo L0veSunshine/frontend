@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { type MouseEvent } from 'react';
 import { Button, Checkbox, Divider, Form, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import './login.less';
 import Logo from '../../assets/img/logo.png';
 import { useNavigate } from 'react-router-dom';
+import { useIntl } from '../utils/i18n/intl.tsx';
 
 const { Item, useForm } = Form;
+
+type FormData = {
+  username: string;
+  password: string;
+  remember: boolean;
+}
 
 function Login() {
   const [form] = useForm();
   const navigator = useNavigate();
+  const { trans } = useIntl();
+
+  const onFormFinish = (value: FormData) => {
+    // todo
+    console.log(value);
+  };
+
+  const toResetPassPage = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigator('/recover');
+  };
 
   return (
     <div className="login-page-content">
@@ -18,25 +36,25 @@ function Login() {
         <div>XGit</div>
       </div>
       <div>
-        <Form form={form} layout="vertical" requiredMark={true} autoComplete="off">
-          <Item name="username" rules={[{ required: true }]}>
+        <Form<FormData> form={form} layout="vertical" requiredMark={true} autoComplete="off" onFinish={onFormFinish}>
+          <Item name="username" rules={[{ required: true, message: '请输入用户名或电子邮箱' }]}>
             <Input prefix={<UserOutlined />} placeholder="用户名或电子邮件" />
           </Item>
-          <Item name="password" rules={[{ required: true }]}>
-            <Input.Password prefix={<LockOutlined />} placeholder="密码" />
+          <Item name="password" rules={[{ required: true, message: '请输入密码' }]}>
+            <Input.Password prefix={<LockOutlined />} placeholder={trans('password')} />
           </Item>
           <Item>
-            <Item name="remember" noStyle>
+            <Item name="remember" valuePropName="checked" noStyle>
               <Checkbox defaultChecked={false}>记住账号</Checkbox>
             </Item>
-            <a className="login-form-forgot" href="" style={{ float: 'right' }}>
+            <a className="login-form-forgot" onClick={toResetPassPage} style={{ float: 'right' }}>
               忘记密码
             </a>
           </Item>
           <Item colon={false} style={{ marginBottom: 0 }}>
-            <Button type="primary" style={{ width: '100%' }}>登录</Button>
+            <Button type="primary" style={{ width: '100%' }} onClick={form.submit}>登录</Button>
           </Item>
-          <Divider plain style={{ margin: '0.5rem 0' }}>没有账号</Divider>
+          <Divider plain style={{ margin: '.75rem 0', userSelect: 'none' }}>没有账号</Divider>
           <Item colon={false}>
             <Button type="default" onClick={() => navigator('/signup')} style={{ width: '100%' }}>注册</Button>
           </Item>

@@ -8,11 +8,19 @@ import './app.less';
 import type { RouteItem } from './route/routeItem.tsx';
 import { genRoutes } from './route/routeItem.tsx';
 import appRoutes from './route/routes.tsx';
+import zh_CN from 'antd/locale/zh_CN';
+import en_US from 'antd/locale/en_US';
+import type { Locale } from 'antd/es/locale';
+
+const antdIntlMapping: Record<string, Locale> = {
+  'zh-CN': zh_CN,
+  'en_US': en_US
+};
 
 function App() {
   const { lang, token } = useSelector(state => state.global);
   const antdGlobalConfig = useMemo<ConfigProviderProps>(() => ({
-    locale: { locale: lang },
+    locale: antdIntlMapping[lang],
     componentSize: 'middle',
     prefixCls: 'x'
   }), [lang]);

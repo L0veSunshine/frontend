@@ -5,11 +5,12 @@
  */
 
 import { getLocaleFromBrowser } from '../utils/i18n/utils.ts';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 interface AppConfig {
   lang: string,
   token: string,
+  menuCollapsed: boolean
   configs?: {
     ops: string[]
     [key: string]: any
@@ -19,16 +20,17 @@ interface AppConfig {
 const appConfig: AppConfig = {
   lang: getLocaleFromBrowser(),
   token: '',
+  menuCollapsed: false
 };
 
 const AppSlice = createSlice({
   name: 'app',
   initialState: appConfig,
   reducers: {
-    changeLang(state, action) {
+    changeLang(state, action: PayloadAction<string>) {
       state.lang = action.payload;
     },
-    setToken(state, action) {
+    setToken(state, action: PayloadAction<string>) {
       state.token = action.payload;
     }
   }
