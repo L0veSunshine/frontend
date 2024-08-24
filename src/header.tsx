@@ -55,7 +55,7 @@ function AppHeader(props: Partial<NavBarStatus>) {
     <div className="app-header">
       <div className="app-header-content">
         <div className="left-btn">
-          <Space direction={'horizontal'} size={'small'} onClick={() => navigator('/')}>
+          <Space direction="horizontal" size="small" onClick={() => navigator('/')}>
             <img className="app-logo" src="../assets/img/logo.png" alt="logo" />
             <div>XGit</div>
           </Space>
