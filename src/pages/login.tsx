@@ -1,10 +1,10 @@
 import React, { type MouseEvent } from 'react';
 import { Button, Checkbox, Divider, Form, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import './login.less';
 import Logo from '../../assets/img/logo.png';
 import { useNavigate } from 'react-router-dom';
 import { useIntl } from '../utils/i18n/intl.tsx';
+import './login.less';
 
 const { Item, useForm } = Form;
 
@@ -36,14 +36,15 @@ function Login() {
         <div>XGit</div>
       </div>
       <div>
-        <Form<FormData> form={form} layout="vertical" requiredMark={true} autoComplete="off" onFinish={onFormFinish}>
+        <Form<FormData> form={form} layout="vertical" requiredMark={true} autoComplete="off"
+          initialValues={{ remember: false }} onFinish={onFormFinish}>
           <Item name="username" rules={[{ required: true, message: '请输入用户名或电子邮箱' }]}>
-            <Input prefix={<UserOutlined />} placeholder="用户名或电子邮件" />
+            <Input prefix={<UserOutlined />} placeholder="用户名或电子邮件" allowClear />
           </Item>
           <Item name="password" rules={[{ required: true, message: '请输入密码' }]}>
-            <Input.Password prefix={<LockOutlined />} placeholder={trans('password')} />
+            <Input.Password prefix={<LockOutlined />} placeholder={trans('password')} allowClear />
           </Item>
-          <Item>
+          <Item style={{ userSelect: 'none' }}>
             <Item name="remember" valuePropName="checked" noStyle>
               <Checkbox defaultChecked={false}>记住账号</Checkbox>
             </Item>
