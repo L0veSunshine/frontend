@@ -23,7 +23,7 @@ type Permission = {
   token?: string
 }
 
-export type RouteItem<T extends ExactInfo = {}> = Omit<PathRouteProps, 'children'> & AdditionInfo<T> & {
+export type RouteItem<T extends ExactInfo = Record<string, any>> = Omit<PathRouteProps, 'children'> & AdditionInfo<T> & {
   children?: RouteItem<T>[]
 }
 

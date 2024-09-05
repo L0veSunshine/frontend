@@ -15,5 +15,8 @@ jobs:
         with:
           useLockFile: true
 
+      - name: lint
+        run: npx eslint .
+
       - name: app-build
         run: npm run build
