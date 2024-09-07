@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import reactHooks from 'eslint-plugin-react-hooks';
 import tsEslint from 'typescript-eslint';
+import { fixupPluginRules } from '@eslint/compat';
 
 export default tsEslint.config(
   {ignores: ['dist']},
@@ -11,7 +12,7 @@ export default tsEslint.config(
       ecmaVersion: 2020,
     },
     plugins: {
-      'react-hooks': reactHooks,
+      'react-hooks': fixupPluginRules(reactHooks),
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
